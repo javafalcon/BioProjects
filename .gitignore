@@ -1,0 +1,10 @@
+#PyCharm files
+__pycache__/
+.idea/
+
+#jupyter notebook files
+.ipynb_checkpoints/
+
+# dir: DNABindingSite/
+DNABindingSite/.ipynb_checkpoints/
+DNABindingSite/data/*.mat
