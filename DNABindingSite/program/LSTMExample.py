@@ -22,8 +22,8 @@ testX, testY = test
 trainX = pad_sequences(trainX, maxlen=100, value=0.)
 testX = pad_sequences(testX, maxlen=100, value=0.)
 # Converting labels to binary vectors
-trainY = to_categorical(trainY)
-testY = to_categorical(testY)
+trainY = to_categorical(trainY,2)
+testY = to_categorical(testY,2)
 
 # Network building
 net = tflearn.input_data([None, 100])
@@ -37,3 +37,4 @@ net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
 model = tflearn.DNN(net, tensorboard_verbose=0)
 model.fit(trainX, trainY, validation_set=(testX, testY), show_metric=True,
           batch_size=32)
+tflearn.layers.core.input_data()
