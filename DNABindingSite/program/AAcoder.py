@@ -36,7 +36,7 @@ def saveStdCode2Json():
     AAStdCode = {}
     for s in properties:
         AAStdCode[s] = dict(zip(aalist, stdCode[s]))
-        print(AAStdCode[s])
+        #print(AAStdCode[s])
     fw = open("../data/AAStdCode.json","w")
     json.dump(AAStdCode,fw,indent=4)
     fw.close()   

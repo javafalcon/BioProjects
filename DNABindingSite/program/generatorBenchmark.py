@@ -7,6 +7,7 @@ Created on Wed Oct 10 11:19:52 2018
 import json
 from AAcoder import loadStdCode
 import numpy as np
+import csv
 
 ROW = 31
 AAStdCode = loadStdCode()
@@ -42,6 +43,23 @@ def formulateSeqs():
     for seq in negativeSeq:
         negativeMatrix[i] = code(seq)
         i += 1
-    return (positiveMatrix, negativeMatrix)
+    #return (positiveMatrix, negativeMatrix)
+    X = np.concatenate((positiveMatrix, negativeMatrix))
     
+    plen = positiveMatrix.shape[0]
+    nlen = negativeMatrix.shape[0]
+    Y1 = np.ones((plen,1))
+    Y2 = np.zeros((nlen,1))
+    Y = np.concatenate((Y1,Y2))
+    
+    data = np.hstack((X, Y))
+    with open('../data/datasets_ws15.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(data)
+
+def main():
+    formulateSeqs()
+    
+if __name__ == '__main__':
+    main()
      
