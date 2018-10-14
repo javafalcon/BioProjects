@@ -9,6 +9,8 @@ import tflearn
 from tflearn.data_utils import to_categorical
 from generatorBenchmark import loadDataFromCSV
 from sklearn.model_selection import train_test_split
+import numpy as np
+from sklearn.metrics import confusion_matrix
 
 # DNA binding sites Dataset loading
 X, y = loadDataFromCSV('../data/datasets_ws15.csv')
@@ -36,3 +38,10 @@ model = tflearn.DNN(net)
 model.fit({'input':X_train},{'target': y_train}, n_epoch=32,
            validation_set=({'input':X_test},{'target':y_test}),
            snapshot_step=100, show_metric=True, run_id='convnet_dbs')
+
+# print confusion matrix
+y_pred_list = model.predict(X_test)
+ind = [ np.argmax(a) for a in y_pred_list]
+y_pred = np.zeros( ( len(y_pred_list), 2))
+y_pred[:,ind] = 1   
+print(confusion_matrix(y_test[:,1],y_pred[:,1]))
