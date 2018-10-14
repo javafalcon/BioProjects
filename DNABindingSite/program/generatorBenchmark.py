@@ -12,14 +12,14 @@ import csv
 ROW = 31
 AAStdCode = loadStdCode()
 keys = ['Molecular Weight','Hydrophobicity','pK1','pK2','PI']
-def load():
+def loadSeqs():
     fr = open('../data/seqdata.json','r')
     seqs = json.load(fr)
     fr.close()
     positive = seqs['positive']
     negative = seqs['negative']
     return positive,negative
-def code(seq):
+def aaCode(seq):
     mat = np.ndarray((ROW,5))
     i,j = 0, 0
     for c in seq:
@@ -30,18 +30,18 @@ def code(seq):
         i += 1
     return mat
 def formulateSeqs():
-    positiveSeq,negativeSeq = load()
+    positiveSeq,negativeSeq = loadSeqs()
     len_of_positive = len(positiveSeq)
     len_of_negative = len(negativeSeq)
     positiveMatrix = np.ndarray((len_of_positive,ROW,5))
     negativeMatrix = np.ndarray((len_of_negative,ROW,5))
     i = 0
     for seq in positiveSeq:
-        positiveMatrix[i] = code(seq)
+        positiveMatrix[i] = aaCode(seq)
         i += 1
     i = 0
     for seq in negativeSeq:
-        negativeMatrix[i] = code(seq)
+        negativeMatrix[i] = aaCode(seq)
         i += 1
     #return (positiveMatrix, negativeMatrix)
     X = np.concatenate((positiveMatrix, negativeMatrix))
@@ -59,7 +59,18 @@ def formulateSeqs():
     with open('../data/datasets_ws15.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(data)
-        
+'''
+def formulateSeqs_GM():
+    positiveSeq, negativeSeq = loadSeqs()
+    len_of_positive = len(positiveSeq)
+    len_of_negative = len(negativeSeq)
+    positiveMatrix = np.ndarray( (len_of_positive, ROW, 7))
+    negativeMatrix = np.ndarray( (len_of_negative, ROW, 7))
+    i = 0
+    for seq in positiveSeq:
+        t = aaCode(seq)
+'''
+
 def loadDataFromCSV(csvfile):
     list_X = []
     list_Y = []
