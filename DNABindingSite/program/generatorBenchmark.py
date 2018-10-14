@@ -45,20 +45,39 @@ def formulateSeqs():
         i += 1
     #return (positiveMatrix, negativeMatrix)
     X = np.concatenate((positiveMatrix, negativeMatrix))
-    
+    print(X.shape)
+    X = np.reshape(X, (57348,155))#31*5=155
     plen = positiveMatrix.shape[0]
     nlen = negativeMatrix.shape[0]
     Y1 = np.ones((plen,1))
     Y2 = np.zeros((nlen,1))
     Y = np.concatenate((Y1,Y2))
-    
+
+    print(X.shape)
+    print(Y.shape)
     data = np.hstack((X, Y))
     with open('../data/datasets_ws15.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(data)
-
+        
+def loadDataFromCSV(csvfile):
+    list_X = []
+    list_Y = []
+    with open(csvfile,'r', newline='') as cf:
+        reader = csv.reader(cf)
+        for row in reader:
+            rd = []
+            for e in row[0:-1]:
+                rd.append(eval(e))
+            list_X.append(rd)
+            list_Y.append(eval(row[-1]))
+    return (np.array(list_X), np.array(list_Y))
+        
 def main():
     formulateSeqs()
+    '''X,Y = loadDataFromCSV('../data/datasets_ws15.csv')
+    print(X[0])
+    print(Y[0])'''
     
 if __name__ == '__main__':
     main()
