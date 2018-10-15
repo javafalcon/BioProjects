@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.metrics import confusion_matrix
 # DNA binding sites Dataset loading
-X, y = loadDataFromCSV('../data/datasets_ws15.csv')
+X, y = loadDataFromCSV('../data/datasets_scal_ws15.csv')
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 # Converting labels to binary vectors
 y_train = trainY = to_categorical(y_train,2)

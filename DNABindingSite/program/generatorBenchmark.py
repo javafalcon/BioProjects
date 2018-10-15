@@ -5,12 +5,12 @@ Created on Wed Oct 10 11:19:52 2018
 @author: falcon1
 """
 import json
-from AAcoder import loadStdCode
+from AAcoder import loadCode
 import numpy as np
 import csv
 
 ROW = 31
-AAStdCode = loadStdCode()
+AACode = loadCode("../data/AASigmCode.json")
 keys = ['Molecular Weight','Hydrophobicity','pK1','pK2','PI']
 def loadSeqs():
     fr = open('../data/seqdata.json','r')
@@ -25,7 +25,7 @@ def aaCode(seq):
     for c in seq:
         j = 0
         for key in keys:
-            mat[i][j] = AAStdCode[key][c]
+            mat[i][j] = AACode[key][c]
             j += 1
         i += 1
     return mat
@@ -56,20 +56,10 @@ def formulateSeqs():
     print(X.shape)
     print(Y.shape)
     data = np.hstack((X, Y))
-    with open('../data/datasets_ws15.csv', 'w', newline='') as csvfile:
+    with open('../data/datasets_sigm_ws15.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(data)
-'''
-def formulateSeqs_GM():
-    positiveSeq, negativeSeq = loadSeqs()
-    len_of_positive = len(positiveSeq)
-    len_of_negative = len(negativeSeq)
-    positiveMatrix = np.ndarray( (len_of_positive, ROW, 7))
-    negativeMatrix = np.ndarray( (len_of_negative, ROW, 7))
-    i = 0
-    for seq in positiveSeq:
-        t = aaCode(seq)
-'''
+
 
 def loadDataFromCSV(csvfile):
     list_X = []
