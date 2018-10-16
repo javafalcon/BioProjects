@@ -7,4 +7,12 @@ __pycache__/
 
 # dir: DNABindingSite/
 DNABindingSite/.ipynb_checkpoints/
-DNABindingSite/data/*.mat
+DNABindingSite/data/
+!DNABindingSite/data/*.fasta
+!DNABindingSite/data/*.txt
+DNABindingSite/log/
+
+DNABindingSite/program/.idea/
+DNABindingSite/program/.ipynb_checkpoints/
+DNABindingSite/program/__pycache__/
+DNABindingSite/program/model/
