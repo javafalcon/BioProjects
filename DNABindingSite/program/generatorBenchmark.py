@@ -8,6 +8,7 @@ import json
 from AAcoder import loadCode
 import numpy as np
 import csv
+from CA import *
 
 ROW = 31
 AACode = loadCode("../data/AASigmCode.json")
@@ -73,7 +74,8 @@ def loadDataFromCSV(csvfile):
             list_X.append(rd)
             list_Y.append(eval(row[-1]))
     return (np.array(list_X), np.array(list_Y))
-        
+
+     
 def main():
     formulateSeqs()
     '''X,Y = loadDataFromCSV('../data/datasets_ws15.csv')
