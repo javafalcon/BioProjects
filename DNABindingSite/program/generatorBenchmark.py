@@ -8,11 +8,12 @@ import json
 from AAcoder import loadCode
 import numpy as np
 import csv
-from CA import *
+from CA import CAMatrix, createCAImageFileOfSeq
 
 ROW = 31
 AACode = loadCode("../data/AASigmCode.json")
 keys = ['Molecular Weight','Hydrophobicity','pK1','pK2','PI']
+
 def loadSeqs():
     fr = open('../data/seqdata.json','r')
     seqs = json.load(fr)
@@ -75,13 +76,62 @@ def loadDataFromCSV(csvfile):
             list_Y.append(eval(row[-1]))
     return (np.array(list_X), np.array(list_Y))
 
-     
-def main():
-    formulateSeqs()
-    '''X,Y = loadDataFromCSV('../data/datasets_ws15.csv')
-    print(X[0])
-    print(Y[0])'''
+# n: the number of rule
+# start,end: 截取CA的start到end行
+def createCAImageArrays(n,start, end):
+    positiveSeq,negativeSeq = loadSeqs()
+    len_of_positive = len(positiveSeq)
+    len_of_negative = len(negativeSeq)
+    positiveMatrix = np.ndarray((len_of_positive,ROW*5, end-start))
+    negativeMatrix = np.ndarray((len_of_negative,ROW*5, end-start))
     
+    i = 0
+    for seq in positiveSeq:
+        positiveMatrix[i] = CAMatrix(seq,n,start,end)
+        i += 1
+    with open('../data/datasets_ca_ws15_positive.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(positiveMatrix) 
+        
+    i = 0
+    for seq in negativeSeq:
+        negativeMatrix[i] = CAMatrix(seq,n,start,end)
+        i += 1
+    with open('../data/datasets_ca_ws15_negative.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(negativeMatrix)     
+    
+    return (positiveMatrix, negativeMatrix)
+     
+
+def loadCAImageArrays(file):
+    list_X = []
+    with open(file,'r', newline='') as cf:
+        reader = csv.reader(cf)
+        for row in reader:
+            rd = []
+            for e in row:
+                rd.append(eval(e))
+            list_X.append(rd)
+    return (np.array(list_X))
+
+        
+def createCAImageFiles(n,start,end):
+    positiveSeq,negativeSeq = loadSeqs()
+    i = 0
+    for seq in positiveSeq:
+        imageFile = '../data/img-CA/positive/' + str(i) + '.jpg'
+        createCAImageFileOfSeq(seq,n,start,end,imageFile)
+        i += 1
+    i = 0
+    for seq in negativeSeq:
+        imageFile = '../data/img-CA/negative/' + str(i) + '.jpg'
+        createCAImageFileOfSeq(seq,n,start,end,imageFile)
+        i += 1     
+        
+def main():
+    #createCAImageFiles(84,30,130)
+    createCAImageArrays(84,30,185)
 if __name__ == '__main__':
     main()
      
