@@ -82,8 +82,8 @@ def createCAImageArrays(n,start, end):
     positiveSeq,negativeSeq = loadSeqs()
     len_of_positive = len(positiveSeq)
     len_of_negative = len(negativeSeq)
-    positiveMatrix = np.ndarray((len_of_positive,ROW*5, end-start))
-    negativeMatrix = np.ndarray((len_of_negative,ROW*5, end-start))
+    positiveMatrix = np.ndarray((len_of_positive, end-start,ROW*5))
+    
     
     i = 0
     for seq in positiveSeq:
@@ -92,7 +92,9 @@ def createCAImageArrays(n,start, end):
     with open('../data/datasets_ca_ws15_positive.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(positiveMatrix) 
-        
+    del positiveMatrix
+    
+    negativeMatrix = np.ndarray((len_of_negative, end-start,ROW*5))    
     i = 0
     for seq in negativeSeq:
         negativeMatrix[i] = CAMatrix(seq,n,start,end)
@@ -101,7 +103,7 @@ def createCAImageArrays(n,start, end):
         writer = csv.writer(csvfile)
         writer.writerows(negativeMatrix)     
     
-    return (positiveMatrix, negativeMatrix)
+    del negativeMatrix
      
 
 def loadCAImageArrays(file):
@@ -131,7 +133,7 @@ def createCAImageFiles(n,start,end):
         
 def main():
     #createCAImageFiles(84,30,130)
-    createCAImageArrays(84,30,185)
+    createCAImageArrays(84,50,105)
 if __name__ == '__main__':
     main()
      
