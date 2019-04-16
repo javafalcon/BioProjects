@@ -8,6 +8,13 @@ Created on Mon Apr 15 15:23:20 2019
 import json
 import numpy as np
 import re
+from keras.applications.resnet50 import ResNet50
+from keras.applications.resnet50 import preprocess_input
+from keras.layers import Dense, Dropout,Input,Flatten
+from keras.optimizers import Adam
+from keras.models import Model
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 def AA_phychem_code():
     """
     aa = "ARNDCQEGHILKMFPSTWYV"
@@ -68,5 +75,27 @@ def load_data():
             i = i + 1
             if i == 50176:
                 break
-    X=X.reshape((3106,224,224,3))   
+    X=X.reshape((-1,224,224,3))   
     return X,y
+
+#X,y = load_data()
+#X = preprocess_input(X)
+#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+input_tensor = Input(shape=(224, 224, 3))
+adam = Adam()
+resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=False)
+net = Flatten()(resnet.output)
+net = Dense(1024, activation="relu")(net)
+net = Dropout(rate=0.5)(net)
+net = Dense(500, activation="relu")(net)
+net = Dropout(rate=0.5)(net)
+out = Dense(units=14, activation="sigmoid")(net)
+
+model = Model(input_tensor, out)
+model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=25, batch_size=64)
+
+y_pred = model.predict(X_test)
+y_p = np.array(y_pred > 0.5).astype(int)
+print("subAcc=%f"%(accuracy_score(y_test,y_p)))
