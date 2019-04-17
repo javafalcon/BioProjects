@@ -78,9 +78,9 @@ def load_data():
     X=X.reshape((-1,224,224,3))   
     return X,y
 
-#X,y = load_data()
-#X = preprocess_input(X)
-#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+X,y = load_data()
+X = preprocess_input(X)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
 input_tensor = Input(shape=(224, 224, 3))
 adam = Adam()
@@ -88,13 +88,13 @@ resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=Fal
 net = Flatten()(resnet.output)
 net = Dense(1024, activation="relu")(net)
 net = Dropout(rate=0.5)(net)
-net = Dense(500, activation="relu")(net)
-net = Dropout(rate=0.5)(net)
+#net = Dense(500, activation="relu")(net)
+#net = Dropout(rate=0.5)(net)
 out = Dense(units=14, activation="sigmoid")(net)
 
 model = Model(input_tensor, out)
 model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
-model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=25, batch_size=64)
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=5, batch_size=64)
 
 y_pred = model.predict(X_test)
 y_p = np.array(y_pred > 0.5).astype(int)
