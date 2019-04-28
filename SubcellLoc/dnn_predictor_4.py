@@ -10,6 +10,7 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Dense, Dropout, Input, Conv1D, MaxPooling1D, Flatten,concatenate
 from keras.layers.embeddings import Embedding
+from keras.layers import LSTM
 from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import Adam
@@ -29,25 +30,43 @@ def load_data():
 
 def net():
     l2value = 0.001
+    lstm_output_size = 80
     main_input = Input(shape=(5000,), dtype='int32', name='main_input')
     x = Embedding(output_dim=200, input_dim=23, input_length=5000)(main_input)
+	
     a = Conv1D(64, 2, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     apool = MaxPooling1D(pool_size=5, padding="same", strides=1)(a)
+    alstm = LSTM(lstm_output_size)(apool)
+	
     b = Conv1D(64, 3, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     bpool = MaxPooling1D(pool_size=5, padding="same", strides=1)(b)
+    blstm = LSTM(lstm_output_size)(bpool)
+	
     c = Conv1D(64, 8, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     cpool = MaxPooling1D(pool_size=5, padding="same", strides=1)(c)
+    clstm = LSTM(lstm_output_size)(cpool)
+	
     d = Conv1D(64, 9, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     dpool = MaxPooling1D(pool_size=5, padding="same", strides=1)(d)
+    dlstm = LSTM(lstm_output_size)(dpool)
+	
     f = Conv1D(64, 4, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     fpool = MaxPooling1D(pool_size=5, padding="same", strides=1)(f)
+    flstm = LSTM(lstm_output_size)(fpool)
+	
     g = Conv1D(64, 5, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     gpool = MaxPooling1D(pool_size=5, padding="same", strides=1)(g)
+    glstm = LSTM(lstm_output_size)(gpool)
+	
     h = Conv1D(64, 6, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     hpool = MaxPooling1D(pool_size=5, padding="same", strides=1)(h)
+    hlstm = LSTM(lstm_output_size)(hpool)
+	
     i = Conv1D(64, 7, activation='relu', padding='same', kernel_regularizer=l2(l2value))(x)
     ipool = MaxPooling1D(pool_size=5, padding="same", strides=1)(i)
-    merge2 = concatenate([apool, bpool, cpool, dpool,fpool,gpool,hpool, ipool], axis=-1)
+    ilstm = LSTM(lstm_output_size)(ipool)
+	
+    merge2 = concatenate([alstm, blstm, clstm, dlstm,flstm,glstm,hlstm, ilstm], axis=-1)
     merge2 = Dropout(0.3)(merge2)
     scalecnn1 = Conv1D(64, 11, activation='relu', padding='same', kernel_regularizer=l2(l2value))(merge2)
     scale1 = MaxPooling1D(pool_size=5, padding="same", strides=1)(scalecnn1)
@@ -81,7 +100,7 @@ model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
 #best_Weight_File="/name_of_the_weight_File.hdf5"
 #checkpoint = ModelCheckpoint(best_Weight_File, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 #callback_list = [checkpoint]
-model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=25, batch_size=64)
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=15, batch_size=64)
 y_pred=model.predict(X_test)    
     
 y_p = np.array(y_pred > 0.5).astype(int)
