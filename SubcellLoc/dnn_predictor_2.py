@@ -117,7 +117,7 @@ model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
 #best_Weight_File="/name_of_the_weight_File.hdf5"
 #checkpoint = ModelCheckpoint(best_Weight_File, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 #callback_list = [checkpoint]
-model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=25, batch_size=64)
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=20, batch_size=64)
 
 # Saving json and model files
 """
