@@ -59,7 +59,7 @@ def distMetrix(X:list):
             print("calculte distance(%s,%s)"%(i,j))
             d[i][j] = distance(set(X[i]),set(X[j]))
             d[j][i] = d[i][j]
-            f.write(d[i][j])
+            f.write(str(d[i][j]))
             f.write(",")
         f.write("\n")
     return d
