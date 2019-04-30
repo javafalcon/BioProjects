@@ -50,13 +50,18 @@ def distMetrix(X:list):
     numpy.ndarray
         距离矩阵
     """
+    f = open("distance.txt",'a')
     N = len(X)
     d = np.ndarray(shape=[N,N])
     for i in range(N):
-        d[i][i] = 0
+        d[i][i] = -1
         for j in range(i+1,N):
+            print("calculte distance(%s,%s)"%(i,j))
             d[i][j] = distance(set(X[i]),set(X[j]))
             d[j][i] = d[i][j]
+            f.write(d[i][j])
+            f.write(",")
+        f.write("\n")
     return d
             
 def compute_prior(s,y):
