@@ -55,12 +55,14 @@ def distMetrix(X:list):
     d = np.ndarray(shape=[N,N])
     for i in range(N):
         d[i][i] = -1
+        f.write(str(i) + ":")
         for j in range(i+1,N):
             print("calculte distance(%s,%s)"%(i,j))
             d[i][j] = distance(set(X[i]),set(X[j]))
             d[j][i] = d[i][j]
             f.write(str(d[i][j]))
             f.write(",")
+            f.flush()
         f.write("\n")
     return d
             
